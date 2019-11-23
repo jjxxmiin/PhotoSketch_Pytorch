@@ -67,9 +67,7 @@ class Generator(nn.Module):
             nn.Tanh()
         )
 
-    def forward(self, real, fake):
-        x = torch.cat((real, fake), 1)
-
+    def forward(self, x):
         x = self.layer1(x)
         x = self.downsampling(x)
         x = self.block(x)
@@ -85,7 +83,7 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
 
         self.layer1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=8, stride=2, padding=0),
+            nn.Conv2d(4, 64, kernel_size=8, stride=2, padding=0),
             nn.LeakyReLU(0.2)
         )
 
@@ -110,9 +108,7 @@ class Discriminator(nn.Module):
             nn.Sigmoid(),
         )
 
-    def forward(self, real, fake):
-        x = torch.cat((real, fake), 1)
-
+    def forward(self, x):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
@@ -121,12 +117,39 @@ class Discriminator(nn.Module):
         return x
 
 
+class GANLoss(nn.Module):
+    def __init__(self, target_real_label=1.0, target_fake_label=0.0, device='cuda'):
+        super(GANLoss, self).__init__()
+        self.device = device
+        self.real_label = target_real_label
+        self.fake_label = target_fake_label
+        self.real_label_var = None
+        self.fake_label_var = None
+        self.loss = nn.BCELoss().to(device)
+
+    def get_target_tensor(self, input, target_is_real):
+        if target_is_real:
+            create_label = ((self.real_label_var is None) or (self.real_label_var.numel() != input.numel()))
+            if create_label:
+                self.real_label_var = torch.full(input.size(), self.real_label, requires_grad=False, device=self.device)
+            target_tensor = self.real_label_var
+        else:
+            create_label = ((self.fake_label_var is None) or (self.fake_label_var.numel() != input.numel()))
+            if create_label:
+                self.fake_label_var = torch.full(input.size(), self.fake_label, requires_grad=False, device=self.device)
+            target_tensor = self.fake_label_var
+        return target_tensor
+
+    def __call__(self, input, target_is_real):
+        target_tensor = self.get_target_tensor(input, target_is_real)
+        return self.loss(input, target_tensor)
+
 
 '''
 from torchsummary import summary
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # PyTorch v0.4.0
-model = Discriminator().to(device)
+model = Generator().to(device)
 
-summary(model, (3, 256, 256))
+summary(model, (3, 258, 258))
 '''

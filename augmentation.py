@@ -69,9 +69,9 @@ class Resize(object):
         image = image.resize(self.output_size, Image.BICUBIC)
 
         for i, target in enumerate(targets):
-            targets[i] =  target.resize(self.output_size, Image.BICUBIC)
+            targets[i] = target.resize(self.output_size, Image.BICUBIC)
 
-            return image, targets
+        return image, targets
 
 
 class Crop(object):
@@ -89,7 +89,7 @@ class Crop(object):
               w_offset:w_offset + self.fine_size]
 
         for i, target in enumerate(targets):
-            targets[i] =  target[:, h_offset:h_offset + self.fine_size,
+            targets[i] = target[:, h_offset:h_offset + self.fine_size,
               w_offset:w_offset + self.fine_size]
 
         return image, targets

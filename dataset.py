@@ -1,7 +1,7 @@
 import os
 import torch.utils.data as data
 from PIL import Image
-
+import torch
 
 class ContourDataset(data.Dataset):
     def __init__(self,
@@ -34,6 +34,8 @@ class ContourDataset(data.Dataset):
 
         if self.transformer is not None:
             image, targets = self.transformer(image, targets)
+
+        targets = torch.cat(targets, 0)
 
         return image, targets
 
