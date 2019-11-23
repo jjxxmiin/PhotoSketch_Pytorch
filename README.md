@@ -20,8 +20,11 @@ ContourDrawing
         |- width-5
 ```
 
+# Train
 
-progressing..................
+```
+python main.py
+```
 
 
 # Reference
