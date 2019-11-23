@@ -10,7 +10,9 @@
 ## Directory Structure
 
 ```
-ContourDrawing
+/gen
+/checkpoint
+/ContourDrawing
     |- image
     |- list
     |- sketch
@@ -18,14 +20,19 @@ ContourDrawing
         |- width-1
         |- width-3
         |- width-5
+main.py
+model.py
+dataset.py
+augmentation.py
 ```
 
-# Train
+이 구조에 맞춰서 깃헙 폴더에 넣어야 합니다.
+
+# Train/Test
 
 ```
 python main.py
 ```
-
 
 # Reference
 - [https://github.com/mtli/PhotoSketch](https://github.com/mtli/PhotoSketch)
