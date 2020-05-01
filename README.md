@@ -26,8 +26,6 @@ dataset.py
 augmentation.py
 ```
 
-이 구조에 맞춰서 깃헙 폴더에 넣어야 합니다.
-
 # Train/Test
 
 ```
